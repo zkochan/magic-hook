@@ -1,0 +1,43 @@
+{
+  "name": "magic-hook",
+  "version": "0.0.0",
+  "description": "Extends functions with pre hooks.",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test/**/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zkochan/magic-hook.git"
+  },
+  "keywords": [
+    "pre",
+    "pre-hook",
+    "pre-hooks",
+    "hook",
+    "hooks",
+    "middleware",
+    "middlewares",
+    "ext",
+    "extension",
+    "extensions",
+    "extending"
+  ],
+  "author": {
+    "name": "Zoltan Kochan",
+    "email": "zoltan.kochan@gmail.com",
+    "url": "http://kochan.io"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zkochan/magic-hook/issues"
+  },
+  "homepage": "https://github.com/zkochan/magic-hook#readme",
+  "publishConfig": {
+    "registry": "http://registry.npmjs.org"
+  },
+  "devDependencies": {
+    "chai": "^3.4.0",
+    "mocha": "^2.3.3"
+  }
+}
