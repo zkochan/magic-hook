@@ -13,10 +13,9 @@ function magicHook(obj, methods) {
 
   var pres = {};
   if (!methods) {
-    methods = [];
-    for (var key in obj) {
-      methods.push(key);
-    }
+    methods = Object.getOwnPropertyNames(obj).filter(function(propName) {
+      return typeof obj[propName] === 'function';
+    });
   }
 
   function hook(name, fn) {
