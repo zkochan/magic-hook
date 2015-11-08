@@ -6,8 +6,47 @@ var sinonChai = require('sinon-chai');
 chai.use(sinonChai);
 var expect = chai.expect;
 var magicHook = require('../');
+var noop = function() {};
 
 describe('magic-hook', function() {
+  it('should throw exception when no parameters passed', function() {
+    expect(function() {
+      magicHook();
+    }).to.throw(Error);
+  });
+
+  it('should throw exception when first parameter not an object', function() {
+    expect(function() {
+      magicHook('not a function');
+    }).to.throw(Error);
+  });
+
+  it('should throw exception when second parameter not an Array', function() {
+    expect(function() {
+      magicHook({}, 'not an Array');
+    }).to.throw(Error);
+  });
+
+  it('should throw exception when called twice on the same object', function() {
+    var a = {
+      foo: noop
+    };
+    magicHook(a, ['hook']);
+    expect(function() {
+      magicHook(a, ['hook']);
+    }).to.throw(Error);
+  });
+
+  it('should throw exception when object has pre method', function() {
+    var a = {
+      pre: noop,
+      foo: noop
+    };
+    expect(function() {
+      magicHook(a, ['hook']);
+    }).to.throw(Error);
+  });
+
   it('should call function when no hooks', function(done) {
     var a = {
       foo: function(value) {
@@ -52,5 +91,69 @@ describe('magic-hook', function() {
     a.pre('foo', pre1);
     a.pre('foo', pre2);
     a.foo(1, 1);
+  });
+
+  it('should hook several methods', function() {
+    var hook1 = sinon.spy();
+    var hook2 = sinon.spy();
+    var a = {
+      foo: hook1,
+      bar: hook2
+    };
+    magicHook(a, ['foo', 'bar']);
+    a.pre('foo', function(next, value) {
+      next(value + 1);
+    });
+    a.pre('bar', function(next, value) {
+      next(value + 2);
+    });
+    a.foo(1);
+    a.bar(2);
+
+    expect(hook1).to.have.been.calledWithExactly(2);
+    expect(hook2).to.have.been.calledWithExactly(4);
+  });
+});
+
+describe('pre', function() {
+  it('should throw exception when no parameters passed', function() {
+    var a = {
+      foo: noop
+    };
+    magicHook(a, ['foo']);
+    expect(function() {
+      a.pre();
+    }).to.throw(Error);
+  });
+
+  it('should throw exception when name is not string', function() {
+    var a = {
+      foo: noop
+    };
+    magicHook(a, ['foo']);
+    expect(function() {
+      a.pre(1);
+    }).to.throw(Error);
+  });
+
+  it('should throw exception when passed pre is not a function', function() {
+    var a = {
+      foo: noop
+    };
+    magicHook(a, ['foo']);
+    expect(function() {
+      a.pre('foo', 1);
+    }).to.throw(Error);
+  });
+
+  it('should throw exception when there\'s' +
+    ' no hook with the passed name', function() {
+    var a = {
+      foo: noop
+    };
+    magicHook(a, ['foo']);
+    expect(function() {
+      a.pre('notExistingHook', noop);
+    }).to.throw(Error);
   });
 });

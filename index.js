@@ -1,8 +1,17 @@
 'use strict';
 
-var magicHook = function(obj, methods) {
-  var pres = {};
+function magicHook(obj, methods) {
+  if (typeof obj !== 'object') {
+    throw new Error('obj should be an object');
+  }
+  if (!(methods instanceof Array)) {
+    throw new Error('methods should be an Array');
+  }
+  if (typeof obj.pre !== 'undefined') {
+    throw new Error('Hooked object already has a pre property');
+  }
 
+  var pres = {};
   obj.pre = function(name, fn) {
     if (typeof name !== 'string') {
       throw new Error('name should be a string');
@@ -10,30 +19,33 @@ var magicHook = function(obj, methods) {
     if (typeof fn !== 'function') {
       throw new Error('fn should be a function');
     }
-    pres[name] = pres[name] || [];
+    if (!pres[name]) {
+      throw new Error('There\'s no hook with the passed name');
+    }
     pres[name].push(fn);
   };
 
   function hook(name, fn) {
+    pres[name] = pres[name] || [];
+
     obj[name] = function() {
-      //var context = this;
       var current = -1;
 
       function next() {
         current++;
-        if (!pres[name] || pres[name].length <= current) {
-          return fn.apply(this, arguments);
+        if (pres[name].length <= current) {
+          return fn.apply(obj, arguments);
         }
         var args = Array.prototype.slice.call(arguments);
-        return pres[name][current].apply(this, [next].concat(args));
+        return pres[name][current].apply(obj, [next].concat(args));
       }
-      return next.apply(this, arguments);
+      return next.apply(obj, arguments);
     };
   }
 
   for (var i = methods.length; i--;) {
     hook(methods[i], obj[methods[i]]);
   }
-};
+}
 
 module.exports = magicHook;
