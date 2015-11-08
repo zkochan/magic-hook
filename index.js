@@ -24,6 +24,22 @@ function magicHook(obj, methods) {
     }
     pres[name].push(fn);
   };
+  obj.removePre = function(name, fnToRemove) {
+    if (typeof name !== 'string') {
+      throw new Error('name should be a string');
+    }
+    if (!obj[name]) {
+      return;
+    }
+    if (arguments.length === 1) {
+      /* Remove all pre callbacks for hook `name` */
+      pres[name] = [];
+      return;
+    }
+    pres[name] = pres[name].filter(function(currFn) {
+      return currFn !== fnToRemove;
+    });
+  };
 
   function hook(name, fn) {
     pres[name] = pres[name] || [];

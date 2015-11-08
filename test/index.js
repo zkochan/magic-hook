@@ -157,3 +157,49 @@ describe('pre', function() {
     }).to.throw(Error);
   });
 });
+
+describe('removePre', function() {
+  it('should be able to remove a particular pre', function(done) {
+    var pre1 = sinon.spy(function(next, value) {
+      next(value);
+    });
+    var pre2 = sinon.spy(function(next, value) {
+      next(value + 100);
+    });
+    var a = {
+      foo: function(value) {
+        expect(value).to.eq(1);
+        expect(pre1).to.have.been.calledOnce;
+        expect(pre2).to.not.have.been.called;
+        done();
+      }
+    };
+    magicHook(a, ['foo']);
+    a.pre('foo', pre1);
+    a.pre('foo', pre2);
+    a.removePre('foo', pre2);
+    a.foo(1);
+  });
+
+  it('should be able to remove all pres associated with a hook', function(done) {
+    var pre1 = sinon.spy(function(next, value) {
+      next(value);
+    });
+    var pre2 = sinon.spy(function(next, value) {
+      next(value + 100);
+    });
+    var a = {
+      foo: function(value) {
+        expect(value).to.eq(1);
+        expect(pre1).to.not.have.been.called;
+        expect(pre2).to.not.have.been.called;
+        done();
+      }
+    };
+    magicHook(a, ['foo']);
+    a.pre('foo', pre1);
+    a.pre('foo', pre2);
+    a.removePre('foo');
+    a.foo(1);
+  });
+});
