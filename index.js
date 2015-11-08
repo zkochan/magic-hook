@@ -4,7 +4,7 @@ function magicHook(obj, methods) {
   if (typeof obj !== 'object') {
     throw new Error('obj should be an object');
   }
-  if (!(methods instanceof Array)) {
+  if (arguments.length > 1 && !(methods instanceof Array)) {
     throw new Error('methods should be an Array');
   }
   if (typeof obj.pre !== 'undefined') {
@@ -12,6 +12,35 @@ function magicHook(obj, methods) {
   }
 
   var pres = {};
+  if (!methods) {
+    methods = [];
+    for (var key in obj) {
+      methods.push(key);
+    }
+  }
+
+  function hook(name, fn) {
+    pres[name] = pres[name] || [];
+
+    obj[name] = function() {
+      var current = -1;
+
+      function next() {
+        current++;
+        if (pres[name].length <= current) {
+          return fn.apply(obj, arguments);
+        }
+        var args = Array.prototype.slice.call(arguments);
+        return pres[name][current].apply(obj, [next].concat(args));
+      }
+      return next.apply(obj, arguments);
+    };
+  }
+
+  for (var i = methods.length; i--;) {
+    hook(methods[i], obj[methods[i]]);
+  }
+
   obj.pre = function(name, fn) {
     if (typeof name !== 'string') {
       throw new Error('name should be a string');
@@ -40,28 +69,6 @@ function magicHook(obj, methods) {
       return currFn !== fnToRemove;
     });
   };
-
-  function hook(name, fn) {
-    pres[name] = pres[name] || [];
-
-    obj[name] = function() {
-      var current = -1;
-
-      function next() {
-        current++;
-        if (pres[name].length <= current) {
-          return fn.apply(obj, arguments);
-        }
-        var args = Array.prototype.slice.call(arguments);
-        return pres[name][current].apply(obj, [next].concat(args));
-      }
-      return next.apply(obj, arguments);
-    };
-  }
-
-  for (var i = methods.length; i--;) {
-    hook(methods[i], obj[methods[i]]);
-  }
 }
 
 module.exports = magicHook;

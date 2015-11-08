@@ -113,6 +113,27 @@ describe('magic-hook', function() {
     expect(hook1).to.have.been.calledWithExactly(2);
     expect(hook2).to.have.been.calledWithExactly(4);
   });
+
+  it('should hook all methods when not specified which', function() {
+    var hook1 = sinon.spy();
+    var hook2 = sinon.spy();
+    var a = {
+      foo: hook1,
+      bar: hook2
+    };
+    magicHook(a);
+    a.pre('foo', function(next, value) {
+      next(value + 1);
+    });
+    a.pre('bar', function(next, value) {
+      next(value + 2);
+    });
+    a.foo(1);
+    a.bar(2);
+
+    expect(hook1).to.have.been.calledWithExactly(2);
+    expect(hook2).to.have.been.calledWithExactly(4);
+  });
 });
 
 describe('pre', function() {
