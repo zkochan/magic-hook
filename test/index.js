@@ -72,6 +72,21 @@ describe('magic-hook', function() {
     a.foo(1);
   });
 
+  it('should return function result whe 1 hook', function() {
+    var spy = sinon.spy(function(value) {
+      return 2;
+    });
+    var a = {
+      foo: spy,
+    };
+    magicHook(a, ['foo']);
+    a.pre('foo', function(next, value) {
+      next(value + 1);
+    });
+    expect(a.foo(1)).to.eq(2);
+    expect(spy).to.have.been.calledWithExactly(1);
+  });
+
   it('should call hooks in correct order', function(done) {
     var pre1 = sinon.spy(function(next, a, b) {
       next(a + 1, b);
