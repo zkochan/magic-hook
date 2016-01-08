@@ -81,7 +81,7 @@ describe('magic-hook', function() {
     };
     magicHook(a, ['foo']);
     a.pre('foo', function(next, value) {
-      next(value + 1);
+      next(value);
     });
     expect(a.foo(1)).to.eq(2);
     expect(spy).to.have.been.calledWithExactly(1);

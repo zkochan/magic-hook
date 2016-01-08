@@ -23,16 +23,19 @@ function magicHook(obj, methods) {
 
     obj[name] = function() {
       var current = -1;
+      var result;
 
       function next() {
         current++;
         if (pres[name].length <= current) {
-          return fn.apply(obj, arguments);
+          result = fn.apply(obj, arguments);
+          return;
         }
         var args = Array.prototype.slice.call(arguments);
-        return pres[name][current].apply(obj, [next].concat(args));
+        pres[name][current].apply(obj, [next].concat(args));
       }
-      return next.apply(obj, arguments);
+      next.apply(obj, arguments);
+      return result;
     };
   }
 
