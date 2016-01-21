@@ -1,20 +1,19 @@
-'use strict';
-
-var magicHook = require('../');
+'use strict'
+const magicHook = require('../')
 
 function Logger() {
-  magicHook(this, ['log']);
+  magicHook(this, ['log'])
 }
 
 Logger.prototype.log = function(msg) {
-  console.log(msg);
-};
+  console.log(msg)
+}
 
-var logger = new Logger();
+let logger = new Logger()
 
 logger.pre('log', function(next, msg) {
-  console.log('Hello world');
-  next(msg);
-});
+  console.log('Hello world')
+  next(msg)
+})
 
-logger.log('la-la');
+logger.log('la-la')
