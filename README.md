@@ -33,57 +33,33 @@ a regular [event emitter](https://nodejs.org/api/events.html).
 
 ## Usage
 
-We can add `pre hooks` to extend our methods.
+You can add `pre hooks` to extend your methods.
 
 ```js
-const logger = require('logger')
 const magicHook = require('magic-hook')
 
-magicHook(logger, ['log'])
-
-logger.pre('log', function(next, msg) {
-  next('hooked message: ' + msg)
-});
-
-logger.pre('log', function(next, msg) {
+let log = magicHook(function(msg) {
   console.log(msg)
-  next(msg)
-});
+})
 
-/* will log "hooked message: Hello world!" to the console and log it with logger */
-logger.log('Hello world!')
-```
+let messageNumber = 0
+function counterHook(next, msg) {
+  messageNumber++
+  next('message #' + messageNumber + ': ' + msg)
+}
+log.pre('log', counterHook);
 
-You can hook all methods of an object by simply not specifying the list of methods to hook:
+// will output "message #1: Hello world!" to the console
+log('Hello world!')
 
-```js
-const magicHook = require('magic-hook')
+// hooks can be removed
+log.removePre(counterHook)
 
-magicHook(Math);
+// will output "Hello world!" to the console, because the counter hook was removed
+log('Hello world!')
 
-Math.pre('max', function(next, a, b) {
-  console.log('max method called')
-  next(a, b)
-});
-
-/* will log to a message to console and assign the max number to maxNumber */
-let maxNumber = Math.max(32, 100)
-```
-
-
-## Removing pres
-
-You can remove a particular `pre` associated with a hook:
-
-```js
-logger.pre('log', someFn)
-logger.removePre('log', someFn)
-```
-
-And you can also remove all pres associated with a hook:
-
-```js
-logger.removePre('log') /* Removes all declared pres on the hook 'log' */
+// To remove all pres associated with a hook just call removePre with no arguments:
+log.removePre()
 ```
 
 
