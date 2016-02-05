@@ -36,9 +36,9 @@ a regular [event emitter](https://nodejs.org/api/events.html).
 You can add `pre hooks` to extend your methods.
 
 ```js
-const magicHook = require('magic-hook')
+const hook = require('magic-hook')
 
-let log = magicHook(function(msg) {
+let log = hook(function(msg) {
   console.log(msg)
 })
 

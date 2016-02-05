@@ -1,9 +1,9 @@
 'use strict'
-const magicHook = require('..')
+const hook = require('..')
 
 function Logger() {}
 
-Logger.prototype.log = magicHook(function(msg) {
+Logger.prototype.log = hook(function(msg) {
   console.log(msg)
 })
 
