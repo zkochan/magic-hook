@@ -63,6 +63,36 @@ describe('magic-hook', function() {
     hooked(1, 1)
   })
 
+  it('should call hooks in correct order when they are passed as arguments', function(done) {
+    let pre1 = sinon.spy((next, a, b) => next(a + 1, b))
+    let pre2 = sinon.spy((next, a, b) => next(a, b + 1))
+
+    let hooked = magicHook((a, b) => {
+      expect(a).to.eq(2)
+      expect(b).to.eq(2)
+      expect(pre1).to.have.been.calledBefore(pre2)
+      done()
+    })
+
+    hooked.pre(pre1, pre2)
+    hooked(1, 1)
+  })
+
+  it('should call hooks in correct order when they are passed in an array', function(done) {
+    let pre1 = sinon.spy((next, a, b) => next(a + 1, b))
+    let pre2 = sinon.spy((next, a, b) => next(a, b + 1))
+
+    let hooked = magicHook((a, b) => {
+      expect(a).to.eq(2)
+      expect(b).to.eq(2)
+      expect(pre1).to.have.been.calledBefore(pre2)
+      done()
+    })
+
+    hooked.pre([pre1, pre2])
+    hooked(1, 1)
+  })
+
   it('should pass context', function(done) {
     let obj = {
       foo: magicHook(function() {
