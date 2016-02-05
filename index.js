@@ -12,6 +12,7 @@ function magicHook(fn) {
   let pres = []
 
   function hookedFunc() {
+    /*jshint validthis:true */
     let current = -1
     let result
 
@@ -36,7 +37,7 @@ function magicHook(fn) {
   }
   hookedFunc.removePre = function(fnToRemove) {
     if (arguments.length === 0) {
-      /* Remove all pre callbacks for hook `name` */
+      // Remove all pre callbacks for hook `name`
       pres = []
       return
     }
