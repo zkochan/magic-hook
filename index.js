@@ -9,7 +9,7 @@ function magicHook(fn) {
     throw new Error('fn should be a function')
   }
   if (typeof fn.pre !== 'undefined') {
-    throw new Error('Hooked object already has a pre property')
+    throw new Error('The passed function is already hooked')
   }
 
   let pres = []
@@ -34,12 +34,12 @@ function magicHook(fn) {
 
   hookedFunc.pre = function() {
     if (arguments.length === 0) {
-      throw new Error('no pres passed')
+      throw new Error('No pre hooks passed')
     }
     let newPres = flatten(slice.call(arguments))
     newPres.forEach(pre => {
       if (typeof pre !== 'function') {
-        throw new Error('pre hook should be a function')
+        throw new Error('Pre hook should be a function')
       }
       pres.push(pre)
     })

@@ -10,16 +10,18 @@ function noop() {}
 
 describe('magic-hook', function() {
   it('should throw exception when no parameters passed', function() {
-    expect(hook).to.throw(Error)
+    expect(hook).to.throw(Error, 'fn should be a function')
   })
 
   it('should throw exception when parameter not an object', function() {
-    expect(() => hook('not a function')).to.throw(Error)
+    expect(() => hook('not a function'))
+      .to.throw(Error, 'fn should be a function')
   })
 
   it('should throw exception when called twice on the same function', function() {
     let hooked = hook(noop)
-    expect(() => hook(hooked)).to.throw(Error)
+    expect(() => hook(hooked))
+      .to.throw(Error, 'The passed function is already hooked')
   })
 
   it('should call function when no hooks', function(done) {
@@ -108,12 +110,12 @@ describe('magic-hook', function() {
 describe('pre', function() {
   it('should throw exception when no parameters passed', function() {
     let hooked = hook(noop)
-    expect(() => hooked.pre()).to.throw(Error)
+    expect(() => hooked.pre()).to.throw(Error, 'No pre hooks passed')
   })
 
   it('should throw exception when passed pre is not a function', function() {
     let hooked = hook(noop)
-    expect(() => hooked.pre(1)).to.throw(Error)
+    expect(() => hooked.pre(1)).to.throw(Error, 'Pre hook should be a function')
   })
 })
 
