@@ -30,8 +30,8 @@ let hookedLog = hook(log)
 
 // A pre hook
 let msgNo = 0
-function counterHook(next, msg) {
-  next('message #' + (++msgNo) + ': ' + msg)
+function counterHook(log, msg) {
+  log('message #' + (++msgNo) + ': ' + msg)
 }
 hookedLog.pre(counterHook)
 
@@ -56,7 +56,7 @@ hookedLog.removePre()
 To abort the target function's execution just don't call the `next` function in the pre hook:
 
 ```js
-hookedLog.pre(next => console.log('The original function was overwritten'))
+hookedLog.pre(log => console.log('The original function was overwritten'))
 
 hookedLog('Doesn\'t matter what goes here')
 //> The original function was overwritten
@@ -67,10 +67,10 @@ You can overwrite the target function's result as well:
 ```js
 let hookedSum = hook((a, b) => a + b)
 
-hookedSum.pre(function(next, a, b) {
+hookedSum.pre(function(sum, a, b) {
   if (a === 1 && b === 1) return 3
 
-  return next(a, b)
+  return sum(a, b)
 })
 
 hookedSum(2, 2)

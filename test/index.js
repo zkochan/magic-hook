@@ -136,6 +136,27 @@ describe('magic-hook', function() {
       expect(hooked()).to.eq(2)
       expect(func).to.have.not.been.called
     })
+
+    describe('applySame', function() {
+      it('should throw exception if arguments passed', function(done) {
+        let hooked = hook(noop)
+        hooked.pre(function(next) {
+          expect(() => next.applySame('some arg'))
+            .to.throw(Error, 'Arguments are not allowed')
+          done()
+        })
+        hooked()
+      })
+
+      it('should pass the same arguments to the next function', function() {
+        let func = sinon.spy(value => value + 1)
+        let hooked = hook(func)
+        hooked.pre(next => next.applySame())
+
+        expect(hooked(2)).to.eq(3)
+        expect(func).to.have.been.calledWithExactly(2)
+      })
+    })
   })
 
   describe('removePre', function() {

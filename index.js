@@ -18,19 +18,28 @@ function magicHook(fn) {
   function hookedFunc() {
     /*jshint validthis:true */
     let current = -1
+    let context = this
 
     function next() {
       current++
 
       if (pres.length <= current) {
-        return fn.apply(this, arguments)
+        return fn.apply(context, arguments)
       }
 
-      let args = slice.call(arguments)
-      return pres[current].apply(this, [next.bind(this)].concat(args))
+      let hookArgs = slice.call(arguments)
+
+      next.applySame = function() {
+        if (arguments.length) {
+          throw new Error('Arguments are not allowed')
+        }
+        return next.apply(context, hookArgs)
+      }
+
+      return pres[current].apply(context, [next].concat(hookArgs))
     }
 
-    return next.apply(this, arguments)
+    return next.apply(context, arguments)
   }
 
   hookedFunc.pre = function() {
