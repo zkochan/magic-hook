@@ -8,6 +8,7 @@ function magicHook(fn) {
   if (typeof fn !== 'function') {
     throw new Error('fn should be a function')
   }
+
   if (typeof fn.pre !== 'undefined') {
     throw new Error('The passed function is already hooked')
   }
@@ -17,42 +18,44 @@ function magicHook(fn) {
   function hookedFunc() {
     /*jshint validthis:true */
     let current = -1
-    let result
 
     function next() {
       current++
+
       if (pres.length <= current) {
-        result = fn.apply(this, arguments)
-        return
+        return fn.apply(this, arguments)
       }
+
       let args = slice.call(arguments)
-      pres[current].apply(this, [next.bind(this)].concat(args))
+      return pres[current].apply(this, [next.bind(this)].concat(args))
     }
-    next.apply(this, arguments)
-    return result
+
+    return next.apply(this, arguments)
   }
 
   hookedFunc.pre = function() {
-    if (arguments.length === 0) {
+    if (!arguments.length) {
       throw new Error('No pre hooks passed')
     }
+
     let newPres = flatten(slice.call(arguments))
+
     newPres.forEach(pre => {
       if (typeof pre !== 'function') {
         throw new Error('Pre hook should be a function')
       }
+
       pres.push(pre)
     })
   }
+
   hookedFunc.removePre = function(fnToRemove) {
-    if (arguments.length === 0) {
-      // Remove all pre callbacks for hook `name`
+    if (!arguments.length) {
       pres = []
       return
     }
-    pres = pres.filter(function(currFn) {
-      return currFn !== fnToRemove
-    })
+
+    pres = pres.filter(currFn => currFn !== fnToRemove)
   }
 
   return hookedFunc
