@@ -1,6 +1,6 @@
 # magic-hook
 
-Extends functions with pre hooks. Inspired by [hooks-js](https://github.com/bnoguchi/hooks-js).
+Extends functions with pre hooks.
 
 [![Dependency Status](https://david-dm.org/zkochan/magic-hook/status.svg?style=flat)](https://david-dm.org/zkochan/magic-hook)
 [![Build Status](https://travis-ci.org/zkochan/magic-hook.svg?branch=master)](https://travis-ci.org/zkochan/magic-hook)
@@ -15,6 +15,72 @@ $ npm install --save magic-hook
 ```
 
 
+## Usage
+
+You can add `pre hooks` to extend your methods.
+
+```js
+const hook = require('magic-hook')
+
+// The target function
+function log(msg) { console.log(msg) }
+
+// The hooked function
+let hookedLog = hook(log)
+
+// A pre hook
+let msgNo = 0
+function counterHook(next, msg) {
+  next('message #' + (++msgNo) + ': ' + msg)
+}
+hookedLog.pre(counterHook)
+
+for (let i = 3; i--;) hookedLog('Hello world!')
+//> message #1: Hello world!
+//> message #2: Hello world!
+//> message #3: Hello world!
+```
+
+Hooks can be removed using `removePre`:
+
+```js
+hookedLog.removePre(counterHook)
+
+hookedLog('Hello world!')
+//> Hello world!
+
+// To remove all the pre hooks associated with a hook just call removePre with no arguments:
+hookedLog.removePre()
+```
+
+To abort the target function's execution just don't call the `next` function in the pre hook:
+
+```js
+hookedLog.pre(next => console.log('The original function was overwritten'))
+
+hookedLog('Doesn\'t matter what goes here')
+//> The original function was overwritten
+```
+
+You can overwrite the target function's result as well:
+
+```js
+let hookedSum = hook((a, b) => a + b)
+
+hookedSum.pre(function(next, a, b) {
+  if (a === 1 && b === 1) return 3
+
+  return next(a, b)
+})
+
+hookedSum(2, 2)
+//> 4
+
+hookedSum(1, 1)
+//> 3
+```
+
+
 ## Motivation
 
 Suppose you have an object with a `save` method.
@@ -23,44 +89,6 @@ It would be nice to be able to declare code that runs before `save`.
 For example, you might want to run validation code before every `save`.
 Or you might want to create plugins that will modify the input parameters of
 your `save` method.
-
-
-## Why no post hook as well?
-
-`post hooks` are the same as events, so no need to replicate the functionality of
-a regular [event emitter](https://nodejs.org/api/events.html).
-
-
-## Usage
-
-You can add `pre hooks` to extend your methods.
-
-```js
-const hook = require('magic-hook')
-
-let log = hook(function(msg) {
-  console.log(msg)
-})
-
-let messageNumber = 0
-function counterHook(next, msg) {
-  messageNumber++
-  next('message #' + messageNumber + ': ' + msg)
-}
-log.pre('log', counterHook);
-
-// will output "message #1: Hello world!" to the console
-log('Hello world!')
-
-// hooks can be removed
-log.removePre(counterHook)
-
-// will output "Hello world!" to the console, because the counter hook was removed
-log('Hello world!')
-
-// To remove all pres associated with a hook just call removePre with no arguments:
-log.removePre()
-```
 
 
 ## License

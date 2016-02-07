@@ -1,22 +1,31 @@
 'use strict'
 const hook = require('..')
 
-function Logger() {}
-
-Logger.prototype.log = hook(function(msg) {
+function log(msg) {
   console.log(msg)
-})
-
-let logger = new Logger()
-
-function createMsgCounter() {
-  let msgCount = 0
-  return function(next, msg) {
-    msgCount++
-    next('Message #' + msgCount + ':' + msg)
-  }
 }
-logger.log.pre(createMsgCounter())
+let hookedLog = hook(log)
 
-logger.log('la-la')
-logger.log('Hello world!')
+let msgNo = 0
+function counterHook(next, msg) {
+  next('message #' + (++msgNo) + ': ' + msg)
+}
+hookedLog.pre(counterHook)
+
+for (let i = 3; i--;) hookedLog('Hello world!')
+//> message #1: Hello world!
+//> message #2: Hello world!
+//> message #3: Hello world!
+
+hookedLog.removePre(counterHook)
+
+hookedLog('Hello world!')
+//> Hello world!
+
+// To remove all pres associated with a hook just call removePre with no arguments:
+hookedLog.removePre()
+
+hookedLog.pre(next => console.log('The original function was overwritten'))
+
+hookedLog('Doesn\'t matter what goes here')
+//> The original function was overwritten

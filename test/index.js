@@ -127,6 +127,15 @@ describe('magic-hook', function() {
 
       expect(func).to.have.been.calledOn(context)
     })
+
+    it('should abort the target function execution', function() {
+      let func = sinon.spy()
+      let hooked = hook(func)
+      hooked.pre(next => 2)
+
+      expect(hooked()).to.eq(2)
+      expect(func).to.have.not.been.called
+    })
   })
 
   describe('removePre', function() {
