@@ -65,6 +65,18 @@ describe('magic-hook', function() {
     hooked(1, 1)
   })
 
+  it('should preserve function context', function(done) {
+    let context = {
+      hooked: hook(function() {
+        expect(this).to.eq(context)
+        done()
+      }),
+    }
+
+    context.hooked.pre(next => next.apply(null, []))
+    context.hooked()
+  })
+
   it('should call hooks in correct order when they are passed as arguments', function(done) {
     let pre1 = sinon.spy((next, a, b) => next(a + 1, b))
     let pre2 = sinon.spy((next, a, b) => next(a, b + 1))

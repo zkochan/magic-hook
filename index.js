@@ -26,7 +26,7 @@ function magicHook(fn) {
         return
       }
       let args = slice.call(arguments)
-      pres[current].apply(this, [next].concat(args))
+      pres[current].apply(this, [next.bind(this)].concat(args))
     }
     next.apply(this, arguments)
     return result
