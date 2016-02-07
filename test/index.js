@@ -13,156 +13,155 @@ describe('magic-hook', function() {
     expect(hook).to.throw(Error, 'fn should be a function')
   })
 
-  it('should throw exception when parameter not an object', function() {
+  it('should throw exception when parameter not a function', function() {
     expect(() => hook('not a function'))
       .to.throw(Error, 'fn should be a function')
   })
 
-  it('should throw exception when called twice on the same function', function() {
+  it('should throw exception when the passed function is already hooked', function() {
     let hooked = hook(noop)
     expect(() => hook(hooked))
       .to.throw(Error, 'The passed function is already hooked')
   })
 
-  it('should call function when no hooks', function(done) {
-    let hooked = hook(function(value) {
-      expect(value).to.eq(1)
-      done()
-    })
+  it('should call function when no hooks', function() {
+    let func = sinon.spy()
+    let hooked = hook(func)
     hooked(1)
+
+    expect(func).to.have.been.calledWithExactly(1)
   })
 
-  it('should modify args when 1 hook', function(done) {
-    let hooked = hook(function(value) {
-      expect(value).to.eq(2)
-      done()
-    })
-    hooked.pre((next, value) => next(value + 1))
-    hooked(1)
-  })
-
-  it('should return function result when 1 hook', function() {
-    let spy = sinon.spy(value => 2)
-    let hooked = hook(spy)
-    hooked.pre((next, value) => next(value))
-    expect(hooked(1)).to.eq(2)
-    expect(spy).to.have.been.calledWithExactly(1)
-  })
-
-  it('should call hooks in correct order', function(done) {
-    let pre1 = sinon.spy((next, a, b) => next(a + 1, b))
-    let pre2 = sinon.spy((next, a, b) => next(a, b + 1))
-
-    let hooked = hook((a, b) => {
-      expect(a).to.eq(2)
-      expect(b).to.eq(2)
-      expect(pre1).to.have.been.calledBefore(pre2)
-      done()
-    })
-
-    hooked.pre(pre1)
-    hooked.pre(pre2)
-    hooked(1, 1)
-  })
-
-  it('should preserve function context', function(done) {
+  it('should preserve context', function() {
+    let func = sinon.spy()
     let context = {
-      hooked: hook(function() {
-        expect(this).to.eq(context)
-        done()
-      }),
+      hooked: hook(func),
     }
 
-    context.hooked.pre(next => next.apply(null, []))
     context.hooked()
+
+    expect(func).to.have.been.calledOn(context)
   })
 
-  it('should call hooks in correct order when they are passed as arguments', function(done) {
-    let pre1 = sinon.spy((next, a, b) => next(a + 1, b))
-    let pre2 = sinon.spy((next, a, b) => next(a, b + 1))
-
-    let hooked = hook((a, b) => {
-      expect(a).to.eq(2)
-      expect(b).to.eq(2)
-      expect(pre1).to.have.been.calledBefore(pre2)
-      done()
+  describe('pre', function() {
+    it('should throw exception when no parameters passed', function() {
+      let hooked = hook(noop)
+      expect(() => hooked.pre()).to.throw(Error, 'No pre hooks passed')
     })
 
-    hooked.pre(pre1, pre2)
-    hooked(1, 1)
-  })
-
-  it('should call hooks in correct order when they are passed in an array', function(done) {
-    let pre1 = sinon.spy((next, a, b) => next(a + 1, b))
-    let pre2 = sinon.spy((next, a, b) => next(a, b + 1))
-
-    let hooked = hook((a, b) => {
-      expect(a).to.eq(2)
-      expect(b).to.eq(2)
-      expect(pre1).to.have.been.calledBefore(pre2)
-      done()
+    it('should throw exception when passed pre is not a function', function() {
+      let hooked = hook(noop)
+      expect(() => hooked.pre('not a function'))
+        .to.throw(Error, 'Pre hook should be a function')
     })
 
-    hooked.pre([pre1, pre2])
-    hooked(1, 1)
+    it('should modify args passed to hooked function', function() {
+      let func = sinon.spy()
+      let hooked = hook(func)
+      hooked.pre((next, a, b) => next(b, a))
+      hooked(1, 2)
+
+      expect(func).to.have.been.calledWithExactly(2, 1)
+    })
+
+    it('should not swallow the hooked function\'s result', function() {
+      let func = sinon.spy(value => 2)
+      let hooked = hook(func)
+      hooked.pre((next, value) => next(value))
+
+      expect(hooked(1)).to.eq(2)
+      expect(func).to.have.been.calledWithExactly(1)
+    })
+
+    it('should call hooks in correct order', function() {
+      let pre1 = sinon.spy((next, a, b) => next(a + 1, b))
+      let pre2 = sinon.spy((next, a, b) => next(a, b + 1))
+
+      let func = sinon.spy()
+      let hooked = hook(func)
+
+      hooked.pre(pre1)
+      hooked.pre(pre2)
+      hooked(1, 1)
+
+      expect(func).to.have.been.calledWithExactly(2, 2)
+      expect(pre1).to.have.been.calledBefore(pre2)
+    })
+
+    it('should call hooks in correct order when they are passed as arguments', function() {
+      let pre1 = sinon.spy((next, a, b) => next(a + 1, b))
+      let pre2 = sinon.spy((next, a, b) => next(a, b + 1))
+
+      let func = sinon.spy()
+      let hooked = hook(func)
+
+      hooked.pre(pre1, pre2)
+      hooked(1, 1)
+
+      expect(func).to.have.been.calledWithExactly(2, 2)
+      expect(pre1).to.have.been.calledBefore(pre2)
+    })
+
+    it('should call hooks in correct order when they are passed in an array', function() {
+      let pre1 = sinon.spy((next, a, b) => next(a + 1, b))
+      let pre2 = sinon.spy((next, a, b) => next(a, b + 1))
+
+      let func = sinon.spy()
+      let hooked = hook(func)
+
+      hooked.pre([pre1, pre2])
+      hooked(1, 1)
+
+      expect(func).to.have.been.calledWithExactly(2, 2)
+      expect(pre1).to.have.been.calledBefore(pre2)
+    })
+
+    it('should not override the hooked function\'s context', function() {
+      let func = sinon.spy()
+      let context = {
+        hooked: hook(func),
+      }
+
+      context.hooked.pre(next => next.apply(null, []))
+      context.hooked()
+
+      expect(func).to.have.been.calledOn(context)
+    })
   })
 
-  it('should pass context', function(done) {
-    let obj = {
-      foo: hook(function() {
-        expect(this).to.eq(obj)
-        done()
-      }),
-    }
+  describe('removePre', function() {
+    it('should be able to remove a particular pre hook', function() {
+      let pre1 = sinon.spy((next, value) => next(value))
+      let pre2 = sinon.spy((next, value) => next(value + 100))
 
-    obj.foo()
-  })
-})
+      let func = sinon.spy()
+      let hooked = hook(func)
 
-describe('pre', function() {
-  it('should throw exception when no parameters passed', function() {
-    let hooked = hook(noop)
-    expect(() => hooked.pre()).to.throw(Error, 'No pre hooks passed')
-  })
+      hooked.pre(pre1)
+      hooked.pre(pre2)
+      hooked.removePre(pre2)
+      hooked(1)
 
-  it('should throw exception when passed pre is not a function', function() {
-    let hooked = hook(noop)
-    expect(() => hooked.pre(1)).to.throw(Error, 'Pre hook should be a function')
-  })
-})
-
-describe('removePre', function() {
-  it('should be able to remove a particular pre', function(done) {
-    let pre1 = sinon.spy((next, value) => next(value))
-    let pre2 = sinon.spy((next, value) => next(value + 100))
-
-    let hooked = hook(function(value) {
-      expect(value).to.eq(1)
       expect(pre1).to.have.been.calledOnce
       expect(pre2).to.not.have.been.called
-      done()
+      expect(func).to.have.been.calledWithExactly(1)
     })
 
-    hooked.pre(pre1)
-    hooked.pre(pre2)
-    hooked.removePre(pre2)
-    hooked(1)
-  })
+    it('should be able to remove all pre hooks associated with a hook', function() {
+      let pre1 = sinon.spy((next, value) => next(value))
+      let pre2 = sinon.spy((next, value) => next(value + 100))
 
-  it('should be able to remove all pres associated with a hook', function(done) {
-    let pre1 = sinon.spy((next, value) => next(value))
-    let pre2 = sinon.spy((next, value) => next(value + 100))
+      let func = sinon.spy()
+      let hooked = hook(func)
 
-    let hooked = hook(function(value) {
-      expect(value).to.eq(1)
+      hooked.pre(pre1)
+      hooked.pre(pre2)
+      hooked.removePre()
+      hooked(1)
+
       expect(pre1).to.not.have.been.called
       expect(pre2).to.not.have.been.called
-      done()
+      expect(func).to.have.been.calledWithExactly(1)
     })
-
-    hooked.pre(pre1)
-    hooked.pre(pre2)
-    hooked.removePre()
-    hooked(1)
   })
 })
