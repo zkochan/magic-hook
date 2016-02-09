@@ -5,8 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha test/{**/,/}*.js",
+    "test-es5": "mocha --compilers js:babel-register",
     "coverage": "istanbul cover _mocha test/{**/,/}*.js -- -R spec",
-    "coveralls": "istanbul cover _mocha test/{**/,/}*.js --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
+    "coveralls": "istanbul cover _mocha test/{**/,/}*.js --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
+    "transpile": "babel index.js --out-file es5.js",
+    "prepublish": "npm run transpile"
   },
   "repository": {
     "type": "git",
@@ -26,7 +29,8 @@
     "extending"
   ],
   "files": [
-    "index.js"
+    "index.js",
+    "es5.js"
   ],
   "author": {
     "name": "Zoltan Kochan",
@@ -42,6 +46,10 @@
     "registry": "http://registry.npmjs.org"
   },
   "devDependencies": {
+    "babel-cli": "^6.5.1",
+    "babel-plugin-transform-es2015-arrow-functions": "^6.5.0",
+    "babel-plugin-transform-es2015-block-scoping": "^6.5.0",
+    "babel-register": "^6.5.1",
     "chai": "^3.4.0",
     "coveralls": "^2.11.6",
     "istanbul": "^0.4.2",
