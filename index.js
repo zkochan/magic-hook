@@ -1,8 +1,8 @@
 'use strict'
-const flatten = require('flatten')
-const slice = Array.prototype.slice;
-
 module.exports = magicHook
+
+const flatten = require('flatten')
+const slice = Array.prototype.slice
 
 function magicHook(fn) {
   if (typeof fn !== 'function') {
@@ -18,28 +18,28 @@ function magicHook(fn) {
   function hookedFunc() {
     /*jshint validthis:true */
     let current = -1
-    let context = this
+    const _this = this
 
     function next() {
       current++
 
       if (pres.length <= current) {
-        return fn.apply(context, arguments)
+        return fn.apply(_this, arguments)
       }
 
-      let hookArgs = slice.call(arguments)
+      const hookArgs = slice.call(arguments)
 
       next.applySame = function() {
         if (arguments.length) {
           throw new Error('Arguments are not allowed')
         }
-        return next.apply(context, hookArgs)
+        return next.apply(_this, hookArgs)
       }
 
-      return pres[current].apply(context, [next].concat(hookArgs))
+      return pres[current].apply(_this, [next].concat(hookArgs))
     }
 
-    return next.apply(context, arguments)
+    return next.apply(_this, arguments)
   }
 
   hookedFunc.pre = function() {
@@ -47,7 +47,7 @@ function magicHook(fn) {
       throw new Error('No pre hooks passed')
     }
 
-    let newPres = flatten(slice.call(arguments))
+    const newPres = flatten(slice.call(arguments))
 
     newPres.forEach(pre => {
       if (typeof pre !== 'function') {

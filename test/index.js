@@ -19,22 +19,22 @@ describe('magic-hook', function() {
   })
 
   it('should throw exception when the passed function is already hooked', function() {
-    let hooked = hook(noop)
+    const hooked = hook(noop)
     expect(() => hook(hooked))
       .to.throw(Error, 'The passed function is already hooked')
   })
 
   it('should call function when no hooks', function() {
-    let func = sinon.spy()
-    let hooked = hook(func)
+    const func = sinon.spy()
+    const hooked = hook(func)
     hooked(1)
 
     expect(func).to.have.been.calledWithExactly(1)
   })
 
   it('should preserve context', function() {
-    let func = sinon.spy()
-    let context = {
+    const func = sinon.spy()
+    const context = {
       hooked: hook(func),
     }
 
@@ -45,19 +45,19 @@ describe('magic-hook', function() {
 
   describe('pre', function() {
     it('should throw exception when no parameters passed', function() {
-      let hooked = hook(noop)
+      const hooked = hook(noop)
       expect(() => hooked.pre()).to.throw(Error, 'No pre hooks passed')
     })
 
     it('should throw exception when passed pre is not a function', function() {
-      let hooked = hook(noop)
+      const hooked = hook(noop)
       expect(() => hooked.pre('not a function'))
         .to.throw(Error, 'Pre hook should be a function')
     })
 
     it('should modify args passed to hooked function', function() {
-      let func = sinon.spy()
-      let hooked = hook(func)
+      const func = sinon.spy()
+      const hooked = hook(func)
       hooked.pre((next, a, b) => next(b, a))
       hooked(1, 2)
 
@@ -65,8 +65,8 @@ describe('magic-hook', function() {
     })
 
     it('should not swallow the hooked function\'s result', function() {
-      let func = sinon.spy(value => 2)
-      let hooked = hook(func)
+      const func = sinon.spy(value => 2)
+      const hooked = hook(func)
       hooked.pre((next, value) => next(value))
 
       expect(hooked(1)).to.eq(2)
@@ -74,11 +74,11 @@ describe('magic-hook', function() {
     })
 
     it('should call hooks in correct order', function() {
-      let pre1 = sinon.spy((next, a, b) => next(a + 1, b))
-      let pre2 = sinon.spy((next, a, b) => next(a, b + 1))
+      const pre1 = sinon.spy((next, a, b) => next(a + 1, b))
+      const pre2 = sinon.spy((next, a, b) => next(a, b + 1))
 
-      let func = sinon.spy()
-      let hooked = hook(func)
+      const func = sinon.spy()
+      const hooked = hook(func)
 
       hooked.pre(pre1)
       hooked.pre(pre2)
@@ -89,11 +89,11 @@ describe('magic-hook', function() {
     })
 
     it('should call hooks in correct order when they are passed as arguments', function() {
-      let pre1 = sinon.spy((next, a, b) => next(a + 1, b))
-      let pre2 = sinon.spy((next, a, b) => next(a, b + 1))
+      const pre1 = sinon.spy((next, a, b) => next(a + 1, b))
+      const pre2 = sinon.spy((next, a, b) => next(a, b + 1))
 
-      let func = sinon.spy()
-      let hooked = hook(func)
+      const func = sinon.spy()
+      const hooked = hook(func)
 
       hooked.pre(pre1, pre2)
       hooked(1, 1)
@@ -103,11 +103,11 @@ describe('magic-hook', function() {
     })
 
     it('should call hooks in correct order when they are passed in an array', function() {
-      let pre1 = sinon.spy((next, a, b) => next(a + 1, b))
-      let pre2 = sinon.spy((next, a, b) => next(a, b + 1))
+      const pre1 = sinon.spy((next, a, b) => next(a + 1, b))
+      const pre2 = sinon.spy((next, a, b) => next(a, b + 1))
 
-      let func = sinon.spy()
-      let hooked = hook(func)
+      const func = sinon.spy()
+      const hooked = hook(func)
 
       hooked.pre([pre1, pre2])
       hooked(1, 1)
@@ -117,20 +117,20 @@ describe('magic-hook', function() {
     })
 
     it('should not override the hooked function\'s context', function() {
-      let func = sinon.spy()
-      let context = {
+      const func = sinon.spy()
+      const context = {
         hooked: hook(func),
       }
 
-      context.hooked.pre(next => next.apply(null, []))
+      context.hooked.pre(next => next())
       context.hooked()
 
       expect(func).to.have.been.calledOn(context)
     })
 
     it('should abort the target function execution', function() {
-      let func = sinon.spy()
-      let hooked = hook(func)
+      const func = sinon.spy()
+      const hooked = hook(func)
       hooked.pre(next => 2)
 
       expect(hooked()).to.eq(2)
@@ -139,8 +139,8 @@ describe('magic-hook', function() {
 
     describe('applySame', function() {
       it('should throw exception if arguments passed', function(done) {
-        let hooked = hook(noop)
-        hooked.pre(function(next) {
+        const hooked = hook(noop)
+        hooked.pre(next => {
           expect(() => next.applySame('some arg'))
             .to.throw(Error, 'Arguments are not allowed')
           done()
@@ -149,8 +149,8 @@ describe('magic-hook', function() {
       })
 
       it('should pass the same arguments to the next function', function() {
-        let func = sinon.spy(value => value + 1)
-        let hooked = hook(func)
+        const func = sinon.spy(value => value + 1)
+        const hooked = hook(func)
         hooked.pre(next => next.applySame())
 
         expect(hooked(2)).to.eq(3)
@@ -161,11 +161,11 @@ describe('magic-hook', function() {
 
   describe('removePre', function() {
     it('should be able to remove a particular pre hook', function() {
-      let pre1 = sinon.spy((next, value) => next(value))
-      let pre2 = sinon.spy((next, value) => next(value + 100))
+      const pre1 = sinon.spy((next, value) => next(value))
+      const pre2 = sinon.spy((next, value) => next(value + 100))
 
-      let func = sinon.spy()
-      let hooked = hook(func)
+      const func = sinon.spy()
+      const hooked = hook(func)
 
       hooked.pre(pre1)
       hooked.pre(pre2)
@@ -178,11 +178,11 @@ describe('magic-hook', function() {
     })
 
     it('should be able to remove all pre hooks associated with a hook', function() {
-      let pre1 = sinon.spy((next, value) => next(value))
-      let pre2 = sinon.spy((next, value) => next(value + 100))
+      const pre1 = sinon.spy((next, value) => next(value))
+      const pre2 = sinon.spy((next, value) => next(value + 100))
 
-      let func = sinon.spy()
-      let hooked = hook(func)
+      const func = sinon.spy()
+      const hooked = hook(func)
 
       hooked.pre(pre1)
       hooked.pre(pre2)
