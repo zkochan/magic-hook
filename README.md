@@ -93,4 +93,4 @@ your `save` method.
 
 ## License
 
-The MIT License (MIT)
+MIT © [Zoltan Kochan](https://github.com/zkochan)
