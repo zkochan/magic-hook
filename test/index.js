@@ -92,6 +92,24 @@ describe('magic-hook', function() {
       expect(pre1).to.have.been.calledBefore(pre2)
     })
 
+    it('should throw exception if calling next second time', function() {
+      const pre = sinon.spy((next, a, b) => {
+        next(a + 1, b)
+        next(a + 1, b)
+      })
+
+      const func = sinon.spy()
+      const hooked = hook(func)
+
+      hooked.pre(pre)
+
+      expect(() => hooked(1, 1)).to.throw(Error,
+        'next was called second time in a pre hook')
+
+      expect(func).to.have.been.calledOnce
+      expect(pre).to.have.been.calledOnce
+    })
+
     it('should call hooks in correct order when they are passed as arguments',
       function() {
         const pre1 = sinon.spy((next, a, b) => next(a + 1, b))

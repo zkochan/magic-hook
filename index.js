@@ -4,6 +4,17 @@ module.exports = magicHook
 const flatten = require('flatten')
 const slice = Array.prototype.slice
 
+function once(fn) {
+  function f() {
+    // jshint validthis:true
+    if (f.called) throw Error('next was called second time in a pre hook')
+    f.called = true
+    return fn.apply(this, arguments)
+  }
+  f.called = false
+  return f
+}
+
 function magicHook(fn) {
   if (typeof fn !== 'function') {
     throw new Error('fn should be a function')
@@ -20,7 +31,7 @@ function magicHook(fn) {
     const _this = this
 
     function createNext(nextPres) {
-      return function() {
+      return once(function() {
         if (!nextPres.length) {
           return fn.apply(_this, arguments)
         }
@@ -33,11 +44,12 @@ function magicHook(fn) {
           if (arguments.length) {
             throw new Error('Arguments are not allowed')
           }
+
           return next.apply(_this, hookArgs)
         }
 
         return pre.apply(_this, [next].concat(hookArgs))
-      }
+      })
     }
 
     return createNext([].concat(pres)).apply(_this, arguments)
