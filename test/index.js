@@ -77,6 +77,17 @@ describe('magic-hook', function() {
       expect(func).to.have.been.calledWithExactly(1)
     })
 
+    it('should call pre hooks on every execution of the hooked function',
+      function() {
+        const func = sinon.spy(value => value)
+        const hooked = hook(func)
+        hooked.pre((next, value) => next(value + 1))
+
+        expect(hooked(1)).to.eq(2)
+        expect(hooked(3)).to.eq(4)
+      }
+    )
+
     it('should call hooks in correct order', function() {
       const pre1 = sinon.spy((next, a, b) => next(a + 1, b))
       const pre2 = sinon.spy((next, a, b) => next(a, b + 1))

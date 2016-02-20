@@ -38,8 +38,8 @@ function magicHook(fn) {
 
         const hookArgs = slice.call(arguments)
 
-        const pre = nextPres.shift()
-        const next = createNext(nextPres)
+        const pre = nextPres[0]
+        const next = createNext(nextPres.slice(1))
         next.applySame = function() {
           if (arguments.length) {
             throw new Error('Arguments are not allowed')
@@ -52,7 +52,7 @@ function magicHook(fn) {
       })
     }
 
-    return createNext([].concat(pres)).apply(_this, arguments)
+    return createNext(pres).apply(_this, arguments)
   }
 
   hookedFunc.pre = function() {
