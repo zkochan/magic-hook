@@ -17,29 +17,30 @@ function magicHook(fn) {
 
   function hookedFunc() {
     /*jshint validthis:true */
-    let current = -1
     const _this = this
 
-    function next() {
-      current++
-
-      if (pres.length <= current) {
-        return fn.apply(_this, arguments)
-      }
-
-      const hookArgs = slice.call(arguments)
-
-      next.applySame = function() {
-        if (arguments.length) {
-          throw new Error('Arguments are not allowed')
+    function createNext(nextPres) {
+      return function() {
+        if (!nextPres.length) {
+          return fn.apply(_this, arguments)
         }
-        return next.apply(_this, hookArgs)
-      }
 
-      return pres[current].apply(_this, [next].concat(hookArgs))
+        const hookArgs = slice.call(arguments)
+
+        const pre = nextPres.shift()
+        const next = createNext(nextPres)
+        next.applySame = function() {
+          if (arguments.length) {
+            throw new Error('Arguments are not allowed')
+          }
+          return next.apply(_this, hookArgs)
+        }
+
+        return pre.apply(_this, [next].concat(hookArgs))
+      }
     }
 
-    return next.apply(_this, arguments)
+    return createNext([].concat(pres)).apply(_this, arguments)
   }
 
   hookedFunc.pre = function() {
