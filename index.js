@@ -15,6 +15,30 @@ function once(fn) {
   return f
 }
 
+function seq(funcs, context) {
+  return once(function() {
+    const func = funcs[0]
+
+    if (funcs.length === 1) {
+      return func.apply(context, arguments)
+    }
+
+    const hookArgs = slice.call(arguments)
+
+    const next = seq(funcs.slice(1), context)
+
+    next.applySame = function() {
+      if (arguments.length) {
+        throw new Error('Arguments are not allowed')
+      }
+
+      return next.apply(context, hookArgs)
+    }
+
+    return func.apply(context, [next].concat(hookArgs))
+  })
+}
+
 function magicHook(fn) {
   if (typeof fn !== 'function') {
     throw new Error('fn should be a function')
@@ -28,31 +52,7 @@ function magicHook(fn) {
 
   function hookedFunc() {
     /*jshint validthis:true */
-    const _this = this
-
-    function createNext(nextPres) {
-      return once(function() {
-        if (!nextPres.length) {
-          return fn.apply(_this, arguments)
-        }
-
-        const hookArgs = slice.call(arguments)
-
-        const pre = nextPres[0]
-        const next = createNext(nextPres.slice(1))
-        next.applySame = function() {
-          if (arguments.length) {
-            throw new Error('Arguments are not allowed')
-          }
-
-          return next.apply(_this, hookArgs)
-        }
-
-        return pre.apply(_this, [next].concat(hookArgs))
-      })
-    }
-
-    return createNext(pres).apply(_this, arguments)
+    return seq(pres.concat(fn), this).apply(this, arguments)
   }
 
   hookedFunc.pre = function() {
