@@ -1,4 +1,6 @@
 'use strict'
+const describe = require('mocha').describe
+const it = require('mocha').it
 const chai = require('chai')
 const sinon = require('sinon')
 const sinonChai = require('sinon-chai')
@@ -18,11 +20,13 @@ describe('magic-hook', function() {
       .to.throw(Error, 'fn should be a function')
   })
 
-  it('should throw exception when the passed function is already hooked', function() {
-    const hooked = hook(noop)
-    expect(() => hook(hooked))
-      .to.throw(Error, 'The passed function is already hooked')
-  })
+  it('should throw exception when the passed function is already hooked',
+    function() {
+      const hooked = hook(noop)
+      expect(() => hook(hooked))
+        .to.throw(Error, 'The passed function is already hooked')
+    }
+  )
 
   it('should call function when no hooks', function() {
     const func = sinon.spy()
@@ -88,33 +92,37 @@ describe('magic-hook', function() {
       expect(pre1).to.have.been.calledBefore(pre2)
     })
 
-    it('should call hooks in correct order when they are passed as arguments', function() {
-      const pre1 = sinon.spy((next, a, b) => next(a + 1, b))
-      const pre2 = sinon.spy((next, a, b) => next(a, b + 1))
+    it('should call hooks in correct order when they are passed as arguments',
+      function() {
+        const pre1 = sinon.spy((next, a, b) => next(a + 1, b))
+        const pre2 = sinon.spy((next, a, b) => next(a, b + 1))
 
-      const func = sinon.spy()
-      const hooked = hook(func)
+        const func = sinon.spy()
+        const hooked = hook(func)
 
-      hooked.pre(pre1, pre2)
-      hooked(1, 1)
+        hooked.pre(pre1, pre2)
+        hooked(1, 1)
 
-      expect(func).to.have.been.calledWithExactly(2, 2)
-      expect(pre1).to.have.been.calledBefore(pre2)
-    })
+        expect(func).to.have.been.calledWithExactly(2, 2)
+        expect(pre1).to.have.been.calledBefore(pre2)
+      }
+    )
 
-    it('should call hooks in correct order when they are passed in an array', function() {
-      const pre1 = sinon.spy((next, a, b) => next(a + 1, b))
-      const pre2 = sinon.spy((next, a, b) => next(a, b + 1))
+    it('should call hooks in correct order when they are passed in an array',
+      function() {
+        const pre1 = sinon.spy((next, a, b) => next(a + 1, b))
+        const pre2 = sinon.spy((next, a, b) => next(a, b + 1))
 
-      const func = sinon.spy()
-      const hooked = hook(func)
+        const func = sinon.spy()
+        const hooked = hook(func)
 
-      hooked.pre([pre1, pre2])
-      hooked(1, 1)
+        hooked.pre([pre1, pre2])
+        hooked(1, 1)
 
-      expect(func).to.have.been.calledWithExactly(2, 2)
-      expect(pre1).to.have.been.calledBefore(pre2)
-    })
+        expect(func).to.have.been.calledWithExactly(2, 2)
+        expect(pre1).to.have.been.calledBefore(pre2)
+      }
+    )
 
     it('should not override the hooked function\'s context', function() {
       const func = sinon.spy()
@@ -177,21 +185,23 @@ describe('magic-hook', function() {
       expect(func).to.have.been.calledWithExactly(1)
     })
 
-    it('should be able to remove all pre hooks associated with a hook', function() {
-      const pre1 = sinon.spy((next, value) => next(value))
-      const pre2 = sinon.spy((next, value) => next(value + 100))
+    it('should be able to remove all pre hooks associated with a hook',
+      function() {
+        const pre1 = sinon.spy((next, value) => next(value))
+        const pre2 = sinon.spy((next, value) => next(value + 100))
 
-      const func = sinon.spy()
-      const hooked = hook(func)
+        const func = sinon.spy()
+        const hooked = hook(func)
 
-      hooked.pre(pre1)
-      hooked.pre(pre2)
-      hooked.removePre()
-      hooked(1)
+        hooked.pre(pre1)
+        hooked.pre(pre2)
+        hooked.removePre()
+        hooked(1)
 
-      expect(pre1).to.not.have.been.called
-      expect(pre2).to.not.have.been.called
-      expect(func).to.have.been.calledWithExactly(1)
-    })
+        expect(pre1).to.not.have.been.called
+        expect(pre2).to.not.have.been.called
+        expect(func).to.have.been.calledWithExactly(1)
+      }
+    )
   })
 })

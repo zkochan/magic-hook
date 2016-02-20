@@ -22,7 +22,8 @@ hookedLog.removePre(counterHook)
 hookedLog('Hello world!')
 //> Hello world!
 
-// To remove all pres associated with a hook just call removePre with no arguments:
+// To remove all pres associated with a hook
+// just call removePre with no arguments:
 hookedLog.removePre()
 
 hookedLog.pre(next => console.log('The original function was overwritten'))

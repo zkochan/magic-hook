@@ -29,13 +29,6 @@
     "define",
     "require",
     "exports",
-    "module",
-    "describe",
-    "before",
-    "beforeEach",
-    "after",
-    "afterEach",
-    "it",
-    "inject"
+    "module"
    ]
 }
