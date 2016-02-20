@@ -4,7 +4,7 @@ module.exports = magicHook
 const flatten = require('flatten')
 const slice = Array.prototype.slice
 
-function once(fn) {
+function strictOnce(fn) {
   function f() {
     // jshint validthis:true
     if (f.called) throw Error('next was called second time in a pre hook')
@@ -16,7 +16,7 @@ function once(fn) {
 }
 
 function seq(funcs, context) {
-  return once(function() {
+  return strictOnce(function() {
     const func = funcs[0]
 
     if (funcs.length === 1) {
