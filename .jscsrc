@@ -44,5 +44,6 @@
 
   "requireEarlyReturn": true,
 
-  "requireSemicolons": false
+  "requireSemicolons": false,
+  "validateQuoteMarks": { "mark": "'", "escape": true }
 }

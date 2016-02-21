@@ -28,5 +28,5 @@ hookedLog.removePre()
 
 hookedLog.pre(next => console.log('The original function was overwritten'))
 
-hookedLog('Doesn\'t matter what goes here')
+hookedLog("Doesn't matter what goes here")
 //> The original function was overwritten

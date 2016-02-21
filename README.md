@@ -58,7 +58,7 @@ To abort the target function's execution just don't call the `next` function in 
 ```js
 hookedLog.pre(log => console.log('The original function was overwritten'))
 
-hookedLog('Doesn\'t matter what goes here')
+hookedLog("Doesn't matter what goes here")
 //> The original function was overwritten
 ```
 

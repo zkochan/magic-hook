@@ -68,7 +68,7 @@ describe('magic-hook', function() {
       expect(func).to.have.been.calledWithExactly(2, 1)
     })
 
-    it('should not swallow the hooked function\'s result', function() {
+    it("should not swallow the hooked function's result", function() {
       const func = sinon.spy(value => 2)
       const hooked = hook(func)
       hooked.pre((next, value) => next(value))
@@ -155,7 +155,7 @@ describe('magic-hook', function() {
       }
     )
 
-    it('should not override the hooked function\'s context', function() {
+    it("should not override the hooked function's context", function() {
       const func = sinon.spy()
       const context = {
         hooked: hook(func),
