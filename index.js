@@ -1,45 +1,10 @@
 'use strict'
-module.exports = magicHook
+module.exports = hook
 
 const flatten = require('flatten')
 const slice = Array.prototype.slice
 
-function strictOnce(fn) {
-  function f() {
-    // jshint validthis:true
-    if (f.called) throw Error('next was called second time in a pre hook')
-    f.called = true
-    return fn.apply(this, arguments)
-  }
-  f.called = false
-  return f
-}
-
-function seq(funcs, context) {
-  return strictOnce(function() {
-    const func = funcs[0]
-
-    if (funcs.length === 1) {
-      return func.apply(context, arguments)
-    }
-
-    const hookArgs = slice.call(arguments)
-
-    const next = seq(funcs.slice(1), context)
-
-    next.applySame = function() {
-      if (arguments.length) {
-        throw new Error('Arguments are not allowed')
-      }
-
-      return next.apply(context, hookArgs)
-    }
-
-    return func.apply(context, [next].concat(hookArgs))
-  })
-}
-
-function magicHook(fn) {
+function hook(fn) {
   if (typeof fn !== 'function') {
     throw new Error('fn should be a function')
   }
@@ -81,4 +46,39 @@ function magicHook(fn) {
   }
 
   return hookedFunc
+}
+
+function seq(funcs, context) {
+  return strictOnce(function() {
+    const func = funcs[0]
+
+    if (funcs.length === 1) {
+      return func.apply(context, arguments)
+    }
+
+    const hookArgs = slice.call(arguments)
+
+    const next = seq(funcs.slice(1), context)
+
+    next.applySame = function() {
+      if (arguments.length) {
+        throw new Error('Arguments are not allowed')
+      }
+
+      return next.apply(context, hookArgs)
+    }
+
+    return func.apply(context, [next].concat(hookArgs))
+  })
+}
+
+function strictOnce(fn) {
+  function f() {
+    // jshint validthis:true
+    if (f.called) throw Error('next was called second time in a pre hook')
+    f.called = true
+    return fn.apply(this, arguments)
+  }
+  f.called = false
+  return f
 }
