@@ -11,7 +11,7 @@ Extends functions with pre hooks.
 ## Installation
 
 ```
-$ npm install --save magic-hook
+npm install --save magic-hook
 ```
 
 
@@ -26,7 +26,7 @@ const hook = require('magic-hook')
 function log(msg) { console.log(msg) }
 
 // The hooked function
-let hookedLog = hook(log)
+const hookedLog = hook(log)
 
 // A pre hook
 let msgNo = 0
@@ -65,7 +65,7 @@ hookedLog('Doesn\'t matter what goes here')
 You can overwrite the target function's result as well:
 
 ```js
-let hookedSum = hook((a, b) => a + b)
+const hookedSum = hook((a, b) => a + b)
 
 hookedSum.pre(function(sum, a, b) {
   if (a === 1 && b === 1) return 3
@@ -93,4 +93,4 @@ your `save` method.
 
 ## License
 
-MIT © [Zoltan Kochan](https://github.com/zkochan)
+MIT © [Zoltan Kochan](https://www.kochan.io)
