@@ -1,5 +1,6 @@
 'use strict'
-module.exports = hook
+const wrappy = require('wrappy')
+module.exports = wrappy(hook)
 
 const flatten = require('flatten')
 const slice = Array.prototype.slice

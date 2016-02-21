@@ -47,6 +47,15 @@ describe('magic-hook', function() {
     expect(func).to.have.been.calledOn(context)
   })
 
+  it('should preserve function properties', function() {
+    function func() {}
+    func.foo = 'bar'
+
+    const hooked = hook(func)
+
+    expect(hooked.foo).to.eq('bar')
+  })
+
   describe('pre', function() {
     it('should throw exception when no parameters passed', function() {
       const hooked = hook(noop)
