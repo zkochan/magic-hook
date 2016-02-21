@@ -105,7 +105,9 @@ describe('magic-hook', function() {
 
     it('should throw exception if calling next second time', function() {
       const pre = sinon.spy((next, a, b) => {
+        expect(next.called).to.be.false
         next(a + 1, b)
+        expect(next.called).to.be.true
         next(a + 1, b)
       })
 
