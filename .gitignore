@@ -28,3 +28,5 @@ node_modules
 
 es5.js
 dist
+
+typings/
