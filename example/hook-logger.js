@@ -1,32 +1,51 @@
 'use strict'
 const hook = require('..')
 
-function log(msg) {
-  console.log(msg)
+// The target function
+function concat(a, b) {
+  return a + b
 }
-let hookedLog = hook(log)
 
+// The hooked function
+const hookedConcat = hook(concat)
+
+// A pre hook
 let msgNo = 0
-function counterHook(next, msg) {
-  next('message #' + (++msgNo) + ': ' + msg)
+function counterHook(next, a, b) {
+  return next('concatenation #' + (++msgNo) + ': ' + a, b)
 }
-hookedLog.pre(counterHook)
+hookedConcat.pre(counterHook)
 
-for (let i = 3; i--;) hookedLog('Hello world!')
-//> message #1: Hello world!
-//> message #2: Hello world!
-//> message #3: Hello world!
+for (let i = 3; i--;) console.log(hookedConcat('Hello ', 'world!'))
 
-hookedLog.removePre(counterHook)
+//! Hooks can be removed using `removePre`:
 
-hookedLog('Hello world!')
-//> Hello world!
+hookedConcat.removePre(counterHook)
 
-// To remove all pres associated with a hook
-// just call removePre with no arguments:
-hookedLog.removePre()
+console.log(hookedConcat('Hello ', 'world!'))
 
-hookedLog.pre(next => console.log('The original function was overwritten'))
+/*! To remove all pres associated with a hook
+    just call removePre with no arguments: */
 
-hookedLog("Doesn't matter what goes here")
-//> The original function was overwritten
+hookedConcat.removePre()
+
+/*! To abort the target function's execution just
+    don't call the `next` function in the pre hook: */
+
+hookedConcat.pre(next => 'The original function was overwritten')
+
+console.log(hookedConcat("Doesn't matter what goes here"))
+
+//! You can overwrite the target function's result as well:
+
+const hookedSum = hook((a, b) => a + b)
+
+hookedSum.pre(function(sum, a, b) {
+  if (a === 1 && b === 1) return 3
+
+  return sum(a, b)
+})
+
+console.log(hookedSum(2, 2))
+
+console.log(hookedSum(1, 1))
