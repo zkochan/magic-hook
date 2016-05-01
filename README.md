@@ -17,7 +17,7 @@ Extends functions with pre hooks.
 
 This module is installed via npm:
 
-``` sh
+```sh
 npm install magic-hook --save
 ```
 <!--/@-->
@@ -27,7 +27,7 @@ npm install magic-hook --save
 You can add `pre hooks` to extend your methods.
 
 <!--@example('./example/hook-logger.js')-->
-``` js
+```js
 'use strict'
 const hook = require('magic-hook')
 
@@ -54,7 +54,7 @@ for (let i = 3; i--;) console.log(hookedConcat('Hello ', 'world!'))
 
 Hooks can be removed using `removePre`:
 
-``` js
+```js
 hookedConcat.removePre(counterHook)
 
 console.log(hookedConcat('Hello ', 'world!'))
@@ -64,14 +64,14 @@ console.log(hookedConcat('Hello ', 'world!'))
 To remove all pres associated with a hook
 just call removePre with no arguments:
 
-``` js
+```js
 hookedConcat.removePre()
 ```
 
 To abort the target function's execution just
 don't call the `next` function in the pre hook:
 
-``` js
+```js
 hookedConcat.pre(next => 'The original function was overwritten')
 
 console.log(hookedConcat("Doesn't matter what goes here"))
@@ -80,7 +80,7 @@ console.log(hookedConcat("Doesn't matter what goes here"))
 
 You can overwrite the target function's result as well:
 
-``` js
+```js
 const hookedSum = hook((a, b) => a + b)
 
 hookedSum.pre(function(sum, a, b) {
