@@ -1,24 +1,20 @@
-<!--@'# ' + package.name-->
+<!--@'# ' + pkg.name-->
 # magic-hook
 <!--/@-->
 
-<!--@package.description-->
+<!--@pkg.description-->
 Extends functions with pre hooks.
 <!--/@-->
 
 <!--@shields.flatSquare('travis', 'coveralls', 'npm')-->
-[![Build status for master](https://img.shields.io/travis/zkochan/magic-hook/master.svg?style=flat-square)](https://travis-ci.org/zkochan/magic-hook)
-[![Test coverage for master](https://img.shields.io/coveralls/zkochan/magic-hook/master.svg?style=flat-square)](https://coveralls.io/r/zkochan/magic-hook?branch=master)
-[![NPM version](https://img.shields.io/npm/v/magic-hook.svg?style=flat-square)](https://www.npmjs.com/package/magic-hook)
+[![Build status for master](https://img.shields.io/travis/zkochan/magic-hook/master.svg?style=flat-square)](https://travis-ci.org/zkochan/magic-hook) [![Test coverage for master](https://img.shields.io/coveralls/zkochan/magic-hook/master.svg?style=flat-square)](https://coveralls.io/r/zkochan/magic-hook?branch=master) [![NPM version](https://img.shields.io/npm/v/magic-hook.svg?style=flat-square)](https://www.npmjs.com/package/magic-hook)
 <!--/@-->
 
-<!--@installation()-->
+<!--@installation({useShortAlias: true})-->
 ## Installation
 
-This module is installed via npm:
-
 ```sh
-npm install magic-hook --save
+npm i -S magic-hook
 ```
 <!--/@-->
 
@@ -115,14 +111,14 @@ your `save` method.
 * * *
 
 <!--@dependencies({ shield: 'flat-square' })-->
-## Dependencies [![Dependency status for master](https://img.shields.io/david/zkochan/magic-hook/master.svg?style=flat-square)](https://david-dm.org/zkochan/magic-hook/master)
+## <a name="dependencies">Dependencies</a> [![Dependency status for master](https://img.shields.io/david/zkochan/magic-hook/master.svg?style=flat-square)](https://david-dm.org/zkochan/magic-hook/master)
 
 - [flatten](https://github.com/jesusabdullah/node-flatten): Flatten arbitrarily nested arrays into a non-nested list of non-array items
 
 <!--/@-->
 
 <!--@devDependencies({ shield: 'flat-square' })-->
-## Dev Dependencies [![devDependency status for master](https://img.shields.io/david/dev/zkochan/magic-hook/master.svg?style=flat-square)](https://david-dm.org/zkochan/magic-hook/master#info=devDependencies)
+## <a name="dev-dependencies">Dev Dependencies</a> [![devDependency status for master](https://img.shields.io/david/dev/zkochan/magic-hook/master.svg?style=flat-square)](https://david-dm.org/zkochan/magic-hook/master#info=devDependencies)
 
 - [babel-cli](https://github.com/babel/babel/blob/master/packages): Babel command line.
 - [babel-plugin-transform-es2015-arrow-functions](https://github.com/babel/babel/blob/master/packages): Compile ES2015 arrow functions to ES5
