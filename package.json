@@ -55,7 +55,7 @@
     "babel-cli": "^6.8.0",
     "babel-plugin-transform-es2015-arrow-functions": "^6.5.0",
     "babel-plugin-transform-es2015-block-scoping": "^6.8.0",
-    "babel-register": "^6.5.1",
+    "babel-register": "^6.8.0",
     "chai": "^3.4.0",
     "istanbul": "^0.4.2",
     "jscs": "^2.10.1",
