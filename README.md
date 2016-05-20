@@ -7,7 +7,7 @@ Extends functions with pre hooks.
 <!--/@-->
 
 <!--@shields.flatSquare('travis', 'coveralls', 'npm')-->
-[![Build status for master](https://img.shields.io/travis/zkochan/magic-hook/master.svg?style=flat-square)](https://travis-ci.org/zkochan/magic-hook) [![Test coverage for master](https://img.shields.io/coveralls/zkochan/magic-hook/master.svg?style=flat-square)](https://coveralls.io/r/zkochan/magic-hook?branch=master) [![NPM version](https://img.shields.io/npm/v/magic-hook.svg?style=flat-square)](https://www.npmjs.com/package/magic-hook)
+[![Build Status](https://img.shields.io/travis/zkochan/magic-hook/master.svg?style=flat-square)](https://travis-ci.org/zkochan/magic-hook) [![Coverage Status](https://img.shields.io/coveralls/zkochan/magic-hook/master.svg?style=flat-square)](https://coveralls.io/r/zkochan/magic-hook?branch=master) [![npm version](https://img.shields.io/npm/v/magic-hook.svg?style=flat-square)](https://www.npmjs.com/package/magic-hook)
 <!--/@-->
 
 <!--@installation({useShortAlias: true})-->
@@ -111,14 +111,14 @@ your `save` method.
 * * *
 
 <!--@dependencies({ shield: 'flat-square' })-->
-## <a name="dependencies">Dependencies</a> [![Dependency status for master](https://img.shields.io/david/zkochan/magic-hook/master.svg?style=flat-square)](https://david-dm.org/zkochan/magic-hook/master)
+## <a name="dependencies">Dependencies</a> [![dependency status](https://img.shields.io/david/zkochan/magic-hook/master.svg?style=flat-square)](https://david-dm.org/zkochan/magic-hook/master)
 
 - [flatten](https://github.com/jesusabdullah/node-flatten): Flatten arbitrarily nested arrays into a non-nested list of non-array items
 
 <!--/@-->
 
 <!--@devDependencies({ shield: 'flat-square' })-->
-## <a name="dev-dependencies">Dev Dependencies</a> [![devDependency status for master](https://img.shields.io/david/dev/zkochan/magic-hook/master.svg?style=flat-square)](https://david-dm.org/zkochan/magic-hook/master#info=devDependencies)
+## <a name="dev-dependencies">Dev Dependencies</a> [![devDependency status](https://img.shields.io/david/dev/zkochan/magic-hook/master.svg?style=flat-square)](https://david-dm.org/zkochan/magic-hook/master#info=devDependencies)
 
 - [babel-cli](https://github.com/babel/babel/blob/master/packages): Babel command line.
 - [babel-plugin-transform-es2015-arrow-functions](https://github.com/babel/babel/blob/master/packages): Compile ES2015 arrow functions to ES5
@@ -129,7 +129,7 @@ your `save` method.
 - [jscs](https://github.com/jscs-dev/node-jscs): JavaScript Code Style
 - [jshint](https://github.com/jshint/jshint): Static analysis tool for JavaScript
 - [mocha](https://github.com/mochajs/mocha): simple, flexible, fun test framework
-- [mos](https://github.com/zkochan/mos): A pluggable module that injects content into your markdown files via hidden JavaScript snippets
+- [mos](https://github.com/mosjs/mos): A pluggable module that injects content into your markdown files via hidden JavaScript snippets
 - [sinon](https://github.com/cjohansen/Sinon.JS): JavaScript test spies, stubs and mocks.
 - [sinon-chai](https://github.com/domenic/sinon-chai): Extends Chai with assertions for the Sinon.JS mocking framework.
 
