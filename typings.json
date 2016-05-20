@@ -1,5 +1,0 @@
-{
-  "ambientDependencies": {
-    "flatten": "file:deps-typings/flatten.d.ts"
-  }
-}
