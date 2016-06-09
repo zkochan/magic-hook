@@ -1,6 +1,6 @@
 {
   "name": "magic-hook",
-  "version": "1.1.0-3",
+  "version": "2.0.0",
   "description": "Extends functions with pre hooks.",
   "main": "index.js",
   "typings": "./dist/magic-hook.d.ts",
