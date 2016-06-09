@@ -13,6 +13,6 @@
   },
   "files": [
     "src/magic-hook.ts",
-    "deps-typings/flatten.d.ts"
+    "typings/flatten.d.ts"
   ]
 }

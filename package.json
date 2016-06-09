@@ -19,7 +19,6 @@
     "transpile": "npm run typescript-transpile && npm run babel-transpile",
     "typescript-transpile": "tsc",
     "babel-transpile": "babel dist/magic-hook.js --out-file dist/magic-hook.es5.js",
-    "prepublish": "typings install && npm run transpile",
     "md": "mos"
   },
   "repository": {
@@ -74,8 +73,7 @@
     "sinon": "^1.17.4",
     "sinon-chai": "^2.8.0",
     "tslint": "^3.6.0",
-    "typescript": "^1.8.9",
-    "typings": "^1.0.4"
+    "typescript": "^1.8.9"
   },
   "dependencies": {
     "flatten": "^1.0.2"
