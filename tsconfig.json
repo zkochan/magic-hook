@@ -7,12 +7,12 @@
     "noImplicitAny": true,
     "suppressImplicitAnyIndexErrors": true,
     "target": "es6",
-    "outDir": "dist",
+    "outDir": "dist/esnext",
     "module": "es2015",
     "moduleResolution": "node"
   },
   "files": [
-    "src/magic-hook.ts",
+    "src/index.ts",
     "typings/flatten.d.ts"
   ]
 }

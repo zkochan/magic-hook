@@ -1,1 +1,1 @@
-module.exports = require('./dist/magic-hook.es5')
+module.exports = require('./dist/es5')

@@ -3,7 +3,8 @@
   "version": "2.0.0",
   "description": "Extends functions with pre hooks.",
   "main": "index.js",
-  "typings": "./dist/magic-hook.d.ts",
+  "jsnext:main": "dist/esnext/index.js",
+  "typings": "dist/es5/index.d.ts",
   "scripts": {
     "test-jscs": "node_modules/jscs/bin/jscs test/index.js example/hook-logger.js",
     "test-jshint": "jshint test/index.js example/hook-logger.js",
@@ -18,7 +19,7 @@
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "transpile": "npm run typescript-transpile && npm run babel-transpile",
     "typescript-transpile": "tsc",
-    "babel-transpile": "babel dist/magic-hook.js --out-file dist/magic-hook.es5.js",
+    "babel-transpile": "babel dist/esnext --out-dir dist/es5",
     "md": "mos"
   },
   "repository": {
@@ -40,9 +41,8 @@
   ],
   "files": [
     "index.js",
-    "dist",
-    "typings",
-    "deps-typings"
+    "dist/",
+    "typings/"
   ],
   "author": {
     "name": "Zoltan Kochan",
