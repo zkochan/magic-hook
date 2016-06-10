@@ -32,13 +32,15 @@ hookedConcat.removePre()
 /*! To abort the target function's execution just
     don't call the `next` function in the pre hook: */
 
-hookedConcat.pre(function(next) { return 'The original function was overwritten'; })
+hookedConcat.pre(function(next) {
+  return 'The original function was overwritten';
+})
 
 console.log(hookedConcat("Doesn't matter what goes here"))
 
 //! You can overwrite the target function's result as well:
 
-var hookedSum = hook(function (a, b) { return a + b; })
+var hookedSum = hook(function(a, b) { return a + b; })
 
 hookedSum.pre(function(sum, a, b) {
   if (a === 1 && b === 1) return 3
