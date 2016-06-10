@@ -4,8 +4,5 @@ node_js:
   - v0.10
   - v4
   - v5
-script:
-  - if [[ $TRAVIS_NODE_VERSION == "v0.10" ]]; then npm run test-es5; fi;
-  - if [[ $TRAVIS_NODE_VERSION != "v0.10" ]]; then npm run test; fi;
 after_script:
   - if [[ $TRAVIS_NODE_VERSION == "v5" ]]; then npm run coveralls; fi;
