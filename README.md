@@ -1,22 +1,16 @@
-<!--@'# ' + pkg.name-->
 # magic-hook
-<!--/@-->
 
-<!--@pkg.description-->
-Extends functions with pre hooks.
-<!--/@-->
+> Extends functions with pre hooks.
 
 <!--@shields.flatSquare('travis', 'coveralls', 'npm')-->
 [![Build Status](https://img.shields.io/travis/zkochan/magic-hook/master.svg?style=flat-square)](https://travis-ci.org/zkochan/magic-hook) [![Coverage Status](https://img.shields.io/coveralls/zkochan/magic-hook/master.svg?style=flat-square)](https://coveralls.io/r/zkochan/magic-hook?branch=master) [![npm version](https://img.shields.io/npm/v/magic-hook.svg?style=flat-square)](https://www.npmjs.com/package/magic-hook)
 <!--/@-->
 
-<!--@installation({useShortAlias: true})-->
 ## Installation
 
 ```sh
 npm i -S magic-hook
 ```
-<!--/@-->
 
 ## Usage
 
@@ -102,8 +96,6 @@ For example, you might want to run validation code before every `save`.
 Or you might want to create plugins that will modify the input parameters of
 your `save` method.
 
-<!--@license()-->
 ## License
 
 [MIT](./LICENSE) © [Zoltan Kochan](http://kochan.io)
-<!--/@-->
