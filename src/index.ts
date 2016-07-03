@@ -13,7 +13,7 @@ export type FuncReturns<T> = (...args: any[]) => T
 
 export type PreHook<T extends FuncReturns<Y>, Y> = (next: NextFunc<T, Y>, ...args: any[]) => Y
 
-export type Hooks<T extends FuncReturns<Y>, Y> = {
+export type Hooks<T extends FuncReturns<Y>, Y> = T & {
   pre(...preHooks: PreHook<T, Y>[]): void
   removePre(preHook?: PreHook<T, Y>): void
 }
