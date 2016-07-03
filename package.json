@@ -15,8 +15,9 @@
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "transpile": "npm run typescript-transpile && npm run babel-transpile",
     "typescript-transpile": "tsc",
-    "babel-transpile": "babel dist/esnext --out-dir dist/es5",
-    "md": "mos"
+    "babel-transpile": "babel dist/esnext --out-dir dist/es5 --copy-files",
+    "md": "mos",
+    "prepublish": "npm run transpile"
   },
   "repository": {
     "type": "git",
