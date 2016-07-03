@@ -1,6 +1,6 @@
 {
   "name": "magic-hook",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Extends functions with pre hooks.",
   "main": "index.js",
   "jsnext:main": "dist/esnext/index.js",
