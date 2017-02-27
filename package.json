@@ -76,7 +76,7 @@
     "npm": "^3.8.2",
     "sinon": "^1.17.4",
     "sinon-chai": "^2.8.0",
-    "tslint": "^3.6.0",
+    "tslint": "^4.5.0",
     "typescript": "^1.8.9"
   },
   "dependencies": {
